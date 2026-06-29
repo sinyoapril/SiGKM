@@ -1,4 +1,5 @@
 *.log
+*.zip
 .DS_Store
 .env
 .env.backup
@@ -21,6 +22,7 @@
 /storage/*.key
 /storage/pail
 /vendor
+/public/template/html
 _ide_helper.php
 Homestead.json
 Homestead.yaml
