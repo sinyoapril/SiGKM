@@ -1,0 +1,12 @@
+@extends('layouts.app')
+@section('content')
+<div class="d-flex justify-content-between align-items-center py-3 mb-4"><div><h4 class="fw-bold mb-1">Dashboard Ketua GKM</h4><p class="text-muted mb-0">Ringkasan mutu dan pekerjaan yang membutuhkan keputusan Anda.</p></div><a href="{{ route('verifikasi.index') }}" class="btn btn-primary"><i class="bx bx-check-circle"></i> Buka Verifikasi</a></div>
+<div class="row">@foreach($stats as $item)<x-dashboard-stat :item="$item" />@endforeach</div>
+<div class="row mb-4"><div class="col-lg-5 mb-4"><div class="card h-100"><h5 class="card-header">Menunggu Verifikasi</h5><div class="card-body">
+    @foreach(['ringkasan'=>'Ringkasan Perkuliahan','rtl'=>'RTL Dosen','notulen'=>'Notulen RTM'] as $key=>$label)<div class="d-flex justify-content-between mb-3"><span>{{ $label }}</span><span class="badge bg-label-warning">{{ $pending[$key] }}</span></div>@endforeach
+    <a href="{{ route('verifikasi.index') }}" class="btn btn-sm btn-primary">Tinjau Semua</a>
+</div></div></div><div class="col-lg-7 mb-4">@include('dashboard.partials.capaian')</div></div>
+<div class="row"><div class="col-lg-6 mb-4"><div class="card h-100"><h5 class="card-header">Temuan Terbaru</h5><div class="list-group list-group-flush">@forelse($temuanTerbaru as $item)<a href="{{ route('temuan-evaluasi.show',$item) }}" class="list-group-item list-group-item-action"><strong>{{ $item->kode_temuan }}</strong> — {{ Str::limit($item->pernyataan,90) }}<br><small>{{ $item->dosen?->nama_dosen }} · {{ $item->evaluasiIndikator?->semester?->label }}</small></a>@empty<div class="p-3 text-muted">Belum ada temuan.</div>@endforelse</div></div></div>
+<div class="col-lg-6 mb-4"><div class="card h-100"><h5 class="card-header">RTM Terbaru</h5><div class="list-group list-group-flush">@forelse($jadwalRtmTerbaru as $item)<a href="{{ route('jadwal-rtm.show',$item) }}" class="list-group-item list-group-item-action"><strong>{{ $item->judul }}</strong><br><small>{{ $item->tanggal?->format('d-m-Y') }} · {{ $item->notulenRtm?->keputusanRtms?->count() ?? 0 }} keputusan</small></a>@empty<div class="p-3 text-muted">Belum ada RTM.</div>@endforelse</div></div></div></div>
+<div class="card"><h5 class="card-header">AMI Terbaru</h5><div class="list-group list-group-flush">@forelse($amiTerbaru as $item)<a href="{{ route('ami.show',$item) }}" class="list-group-item list-group-item-action"><strong>AMI {{ $item->tahunAkademik?->nama }}</strong> — {{ Str::limit($item->temuan,110) }}</a>@empty<div class="p-3 text-muted">Belum ada AMI.</div>@endforelse</div></div>
+@endsection
